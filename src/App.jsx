@@ -196,7 +196,7 @@ export default function TaskBoard() {
       snapshot.forEach(doc => {
         list.push(doc.data());
       });
-      
+
       // If Firestore is empty (first run), pre-populate with INITIAL_TASKS!
       if (list.length === 0 && tasks.length === INITIAL_TASKS.length) {
         INITIAL_TASKS.forEach(async (t) => {
@@ -308,7 +308,7 @@ export default function TaskBoard() {
     } else {
       setTasks(prev => [...prev, newTask]);
     }
-    
+
     setTaskInput("");
     setDetailInput("");
     setMemberSelect("");
@@ -377,7 +377,7 @@ export default function TaskBoard() {
     } else {
       setMembers(prev => [...prev, newMember]);
     }
-    
+
     setMemberNameInput("");
     setMemberRoleInput("");
   };
@@ -507,11 +507,11 @@ export default function TaskBoard() {
       const matchPortal = currentRole === "admin" ? true : t.assignedTo == currentRole;
       if (!matchPortal) return false;
 
-      const matchSearch = (t.title || "").toLowerCase().includes(searchQuery.toLowerCase()) || 
-                          (t.detail || "").toLowerCase().includes(searchQuery.toLowerCase());
+      const matchSearch = (t.title || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (t.detail || "").toLowerCase().includes(searchQuery.toLowerCase());
       const matchMember = filterMember === "all" ? true :
-                           filterMember === "unassigned" ? (t.assignedTo == null) :
-                           t.assignedTo == filterMember;
+        filterMember === "unassigned" ? (t.assignedTo == null) :
+          t.assignedTo == filterMember;
       const matchPriority = filterPriority === "all" ? true : t.priority === filterPriority;
       const matchStatus = filterStatus === "all" ? true : t.status === filterStatus;
 
@@ -524,13 +524,13 @@ export default function TaskBoard() {
 
   return (
     <div className="min-h-screen bg-background text-foreground transition-colors duration-300 font-sans">
-      
+
       {/* Dynamic Warning Banner for Local Offline Mode */}
       {!isFirebaseActive && (
         <div className="bg-gradient-to-r from-amber-600 to-orange-500 text-white text-xs py-2.5 px-4 text-center font-bold flex items-center justify-center gap-2 relative shadow-md">
           <AlertTriangle className="size-4 animate-bounce" />
           <span>📡 Running in Local Cache Mode. Paste your Firebase credentials into the <code>.env</code> file in your IDE to go multiplayer live!</span>
-          <button 
+          <button
             onClick={() => alert("Check the instructions inside the 'implementation_plan.md' file inside your IDE to find where to get your Firebase Console credentials.")}
             className="underline hover:text-amber-100 ml-1.5"
           >
@@ -567,11 +567,10 @@ export default function TaskBoard() {
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                    isActive
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${isActive
                       ? "bg-primary text-primary-foreground shadow-lg shadow-purple-600/20"
                       : "text-muted-foreground hover:text-foreground"
-                  }`}
+                    }`}
                 >
                   <Icon className="size-4" />
                   {tab.label}
@@ -597,14 +596,14 @@ export default function TaskBoard() {
             </div>
 
             {/* Demo Reset Button */}
-            <Button
+            {/* <Button
               variant="outline"
               size="sm"
               onClick={handleResetDemoData}
               className="text-xs border-dashed text-purple-400 border-purple-500/30 hover:bg-purple-500/10"
             >
               Reset Demo Data
-            </Button>
+            </Button> */}
 
             {/* Dark Mode Toggle */}
             <Button
@@ -632,9 +631,8 @@ export default function TaskBoard() {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex flex-col items-center gap-1 text-[10px] py-1 px-3 rounded-lg ${
-                  isActive ? "text-purple-400 font-bold" : "text-muted-foreground"
-                }`}
+                className={`flex flex-col items-center gap-1 text-[10px] py-1 px-3 rounded-lg ${isActive ? "text-purple-400 font-bold" : "text-muted-foreground"
+                  }`}
               >
                 <Icon className="size-4" />
                 {tab.label}
@@ -646,7 +644,7 @@ export default function TaskBoard() {
 
       {/* Main Content Layout */}
       <main className="max-w-7xl mx-auto px-6 py-8 space-y-8">
-        
+
         {/* Statistics Widgets Banner */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           <Card className="glass relative overflow-hidden group hover:scale-[1.01] transition-transform duration-200">
@@ -710,10 +708,10 @@ export default function TaskBoard() {
         {/* ----------------- TAB: KANBAN BOARD ----------------- */}
         {activeTab === "board" && (
           <div className="space-y-6">
-            
+
             {/* Quick Controls Grid */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
-              
+
               {currentRole === "admin" ? (
                 /* Leader Task Form */
                 <Card className="glass lg:col-span-1 border border-border/30">
@@ -964,21 +962,19 @@ export default function TaskBoard() {
                     }}
                     onDragLeave={() => setDragOverColumn(null)}
                     onDrop={e => handleDropToColumn(e, status)}
-                    className={`flex flex-col rounded-2xl p-4 transition-all duration-200 min-h-[450px] ${
-                      isOver
+                    className={`flex flex-col rounded-2xl p-4 transition-all duration-200 min-h-[450px] ${isOver
                         ? "bg-purple-900/10 border-2 border-dashed border-purple-500/50 scale-[1.01]"
                         : "bg-secondary/40 border border-border/40"
-                    }`}
+                      }`}
                   >
-                    
+
                     {/* Column Header */}
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center gap-2">
-                        <span className={`w-2.5 h-2.5 rounded-full ${
-                          status === "Pending" ? "bg-slate-400" :
-                          status === "In Progress" ? "bg-blue-500" :
-                          status === "In Review" ? "bg-amber-500" : "bg-emerald-500"
-                        }`} />
+                        <span className={`w-2.5 h-2.5 rounded-full ${status === "Pending" ? "bg-slate-400" :
+                            status === "In Progress" ? "bg-blue-500" :
+                              status === "In Review" ? "bg-amber-500" : "bg-emerald-500"
+                          }`} />
                         <h4 className="font-bold text-sm">{status}</h4>
                       </div>
                       <span className="text-xs px-2 py-0.5 rounded-md bg-secondary/80 font-bold">
@@ -1003,13 +999,12 @@ export default function TaskBoard() {
                               draggable
                               onDragStart={e => handleDragStart(e, t.id)}
                               onDragEnd={handleDragEnd}
-                              className={`p-4 rounded-xl glass hover:border-border/60 hover:shadow-lg transition-all duration-200 cursor-grab active:cursor-grabbing border border-border/30 relative flex flex-col justify-between gap-3 ${
-                                t.status === "Pending" ? "status-pending" :
-                                t.status === "In Progress" ? "status-inprogress" :
-                                t.status === "In Review" ? "status-underreview" : "status-completed"
-                              } ${isBeingDragged ? "opacity-35 scale-95" : ""}`}
+                              className={`p-4 rounded-xl glass hover:border-border/60 hover:shadow-lg transition-all duration-200 cursor-grab active:cursor-grabbing border border-border/30 relative flex flex-col justify-between gap-3 ${t.status === "Pending" ? "status-pending" :
+                                  t.status === "In Progress" ? "status-inprogress" :
+                                    t.status === "In Review" ? "status-underreview" : "status-completed"
+                                } ${isBeingDragged ? "opacity-35 scale-95" : ""}`}
                             >
-                              
+
                               {/* Task Card Header */}
                               <div>
                                 <div className="flex items-start justify-between gap-2">
@@ -1084,11 +1079,10 @@ export default function TaskBoard() {
               }}
               onDragLeave={() => setDragOverMemberId(null)}
               onDrop={e => handleDropToMember(e, null)}
-              className={`p-4 rounded-xl border border-dashed text-center text-xs transition-all ${
-                dragOverMemberId === "unassigned"
+              className={`p-4 rounded-xl border border-dashed text-center text-xs transition-all ${dragOverMemberId === "unassigned"
                   ? "bg-purple-900/10 border-purple-500/50 scale-[1.01]"
                   : "bg-secondary/10 border-border/20 text-muted-foreground"
-              }`}
+                }`}
             >
               <div className="flex items-center justify-center gap-2">
                 <Trash2 className="size-4 text-purple-400" />
@@ -1102,9 +1096,9 @@ export default function TaskBoard() {
         {/* ----------------- TAB: TEAM MEMBERS ----------------- */}
         {activeTab === "team" && (
           <div className="space-y-6">
-            
+
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              
+
               {currentRole === "admin" ? (
                 /* Add Member Card */
                 <Card className="glass border border-border/30">
@@ -1184,11 +1178,10 @@ export default function TaskBoard() {
                           }}
                           onDragLeave={() => setDragOverMemberId(null)}
                           onDrop={e => handleDropToMember(e, m.id)}
-                          className={`p-4 rounded-xl border flex items-center justify-between transition-all duration-200 ${
-                            isOver
+                          className={`p-4 rounded-xl border flex items-center justify-between transition-all duration-200 ${isOver
                               ? "bg-purple-900/10 border-2 border-dashed border-purple-500/50 scale-[1.01]"
                               : "bg-secondary/20 border border-border/30 hover:border-border/60"
-                          }`}
+                            }`}
                         >
                           <div className="flex items-center gap-3">
                             <div className={`size-10 rounded-xl bg-gradient-to-tr ${m.color} text-white flex items-center justify-center font-bold text-sm shadow-md`}>
@@ -1252,7 +1245,7 @@ export default function TaskBoard() {
               </div>
             </CardHeader>
             <CardContent className="pt-4 p-5">
-              
+
               {/* Calendar Days Row */}
               <div className="grid grid-cols-7 gap-2 text-center text-xs font-bold text-muted-foreground mb-2">
                 {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map(d => (
@@ -1270,18 +1263,16 @@ export default function TaskBoard() {
                     <div
                       key={idx}
                       onClick={() => dateStr && setSelectedDate(dateStr)}
-                      className={`min-h-[110px] rounded-xl border p-2 flex flex-col justify-between transition-all duration-200 cursor-pointer ${
-                        !dateStr
+                      className={`min-h-[110px] rounded-xl border p-2 flex flex-col justify-between transition-all duration-200 cursor-pointer ${!dateStr
                           ? "bg-transparent border-transparent pointer-events-none opacity-20"
                           : isToday
-                          ? "bg-purple-500/10 border-purple-500/50 shadow-md shadow-purple-500/5"
-                          : "bg-secondary/15 border-border/25 hover:border-border/70 hover:bg-secondary/35"
-                      }`}
+                            ? "bg-purple-500/10 border-purple-500/50 shadow-md shadow-purple-500/5"
+                            : "bg-secondary/15 border-border/25 hover:border-border/70 hover:bg-secondary/35"
+                        }`}
                     >
                       <div className="flex justify-between items-start">
-                        <span className={`text-xs font-bold rounded-full size-6 flex items-center justify-center ${
-                          isToday ? "bg-purple-600 text-white font-black" : "text-muted-foreground"
-                        }`}>
+                        <span className={`text-xs font-bold rounded-full size-6 flex items-center justify-center ${isToday ? "bg-purple-600 text-white font-black" : "text-muted-foreground"
+                          }`}>
                           {dateStr ? dateStr.split("-")[2] : ""}
                         </span>
                         {dayTasks.length > 0 && (
@@ -1296,11 +1287,10 @@ export default function TaskBoard() {
                         {dayTasks.slice(0, 2).map(t => (
                           <div
                             key={t.id}
-                            className={`text-[9px] px-1.5 py-0.5 rounded truncate font-medium ${
-                              t.status === "Completed" ? "bg-emerald-500/15 text-emerald-400" :
-                              t.status === "In Progress" ? "bg-blue-500/15 text-blue-400" :
-                              "bg-slate-500/15 text-slate-300"
-                            }`}
+                            className={`text-[9px] px-1.5 py-0.5 rounded truncate font-medium ${t.status === "Completed" ? "bg-emerald-500/15 text-emerald-400" :
+                                t.status === "In Progress" ? "bg-blue-500/15 text-blue-400" :
+                                  "bg-slate-500/15 text-slate-300"
+                              }`}
                             title={t.title}
                           >
                             {t.title}
@@ -1324,9 +1314,9 @@ export default function TaskBoard() {
         {/* ----------------- TAB: ANALYTICS & REPORTS ----------------- */}
         {activeTab === "analytics" && (
           <div className="space-y-6 animate-fade-in">
-            
+
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              
+
               {/* Analytics Summary */}
               <Card className="glass border border-border/30">
                 <CardHeader className="pb-3 border-b border-border/20">
@@ -1334,7 +1324,7 @@ export default function TaskBoard() {
                   <CardDescription className="text-xs">Real-time team completion statistics</CardDescription>
                 </CardHeader>
                 <CardContent className="pt-4 p-5 space-y-6">
-                  
+
                   {/* Progress Meter */}
                   <div className="space-y-2">
                     <div className="flex justify-between items-center text-xs">
@@ -1352,7 +1342,7 @@ export default function TaskBoard() {
                   {/* Task Status Meters */}
                   <div className="space-y-3.5">
                     <h5 className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">Statuses distribution</h5>
-                    
+
                     {[
                       { label: "Completed", count: stats.completed, color: "bg-emerald-500" },
                       { label: "In Review", count: stats.review, color: "bg-amber-500" },
@@ -1386,7 +1376,7 @@ export default function TaskBoard() {
                   </div>
                 </CardHeader>
                 <CardContent className="pt-4 p-5">
-                  
+
                   {filteredTasks.length === 0 ? (
                     <div className="py-12 text-center text-xs text-muted-foreground">
                       No tasks found matching active query settings. Try adjusting filters on the Board.
