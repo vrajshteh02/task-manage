@@ -77,8 +77,14 @@ export default function TaskBoard() {
 
   // App Theme & Navigation State
   const [isDarkMode, setIsDarkMode] = useState(true);
-  const [activeTab, setActiveTab] = useState("board"); // board, team, calendar, analytics
-  const [currentRole, setCurrentRole] = useState("admin"); // admin or member ID (number)
+  const [currentRole, setCurrentRole] = useState(null); // null, 'admin', or member ID (number)
+
+  // Login Panel / Lock Screen Input States
+  const [passcodeAttempt, setPasscodeAttempt] = useState("");
+  const [loginError, setLoginError] = useState("");
+  const [selectedMemberLogin, setSelectedMemberLogin] = useState("");
+  const [selectedRoleType, setSelectedRoleType] = useState("member"); // 'member' or 'admin'
+
 
   // Core Data States
   const [tasks, setTasks] = useState(() => {
@@ -215,6 +221,18 @@ export default function TaskBoard() {
       case "In Review": return "bg-amber-500/20 text-amber-400";
       case "Completed": return "bg-emerald-500/20 text-emerald-400";
       default: return "bg-slate-500/20 text-slate-400";
+    }
+  };
+
+  // Authenticate admin portal access
+  const handleAdminLogin = () => {
+    const defaultCode = import.meta.env.VITE_ADMIN_PASSCODE || "admin123";
+    if (passcodeAttempt === defaultCode) {
+      setCurrentRole("admin");
+      setPasscodeAttempt("");
+      setLoginError("");
+    } else {
+      setLoginError("Access Denied: Incorrect passcode.");
     }
   };
 
@@ -446,6 +464,158 @@ export default function TaskBoard() {
   // Board display split columns
   const columns = ["Pending", "In Progress", "In Review", "Completed"];
 
+  if (currentRole === null) {
+    return (
+      <div className={`min-h-screen flex items-center justify-center p-6 transition-colors duration-300 font-sans relative overflow-hidden ${isDarkMode ? "bg-[#09090b] text-foreground" : "bg-slate-50 text-slate-900"}`}>
+        
+        {/* Glow Effects */}
+        <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-purple-500/10 rounded-full filter blur-[120px] pointer-events-none" />
+        <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-indigo-500/10 rounded-full filter blur-[120px] pointer-events-none" />
+        
+        {/* Sign In Container */}
+        <div className="w-full max-w-[440px] glass border border-border/40 rounded-3xl p-8 relative shadow-2xl space-y-6">
+          
+          {/* Header */}
+          <div className="text-center space-y-2">
+            <div className="inline-flex p-3 bg-purple-500/10 text-purple-400 rounded-2xl animate-pulse">
+              <Sparkles className="size-6" />
+            </div>
+            <h2 className="text-xl font-bold tracking-tight">Access Workspace Portal</h2>
+            <p className="text-xs text-muted-foreground">Select your entry role type to access the workspace board.</p>
+          </div>
+
+          {/* Segment Selector for Role Type */}
+          <div className="grid grid-cols-2 gap-1.5 p-1 bg-secondary/40 rounded-2xl border border-border/20">
+            <button
+              onClick={() => {
+                setSelectedRoleType("member");
+                setLoginError("");
+              }}
+              className={`py-2 rounded-xl text-xs font-semibold tracking-wide transition-all ${
+                selectedRoleType === "member"
+                  ? "bg-purple-600 text-white shadow-lg shadow-purple-600/15"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              Team Member
+            </button>
+            <button
+              onClick={() => {
+                setSelectedRoleType("admin");
+                setLoginError("");
+              }}
+              className={`py-2 rounded-xl text-xs font-semibold tracking-wide transition-all ${
+                selectedRoleType === "admin"
+                  ? "bg-purple-600 text-white shadow-lg shadow-purple-600/15"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              Leader (Admin)
+            </button>
+          </div>
+
+          {/* Tab Content: Team Member Portal */}
+          {selectedRoleType === "member" && (
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider block">Choose Your Account</label>
+                <select
+                  value={selectedMemberLogin}
+                  onChange={(e) => {
+                    setSelectedMemberLogin(e.target.value);
+                    setLoginError("");
+                  }}
+                  className="w-full bg-secondary/50 border border-border/30 rounded-xl px-4 py-3 text-sm text-foreground font-medium outline-none focus:border-purple-500/50 transition-colors cursor-pointer"
+                >
+                  <option value="">Select your name...</option>
+                  {members.map((m) => (
+                    <option key={m.id} value={m.id}>
+                      {m.name} ({m.role})
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {members.length === 0 ? (
+                <div className="p-3.5 bg-amber-500/10 border border-amber-500/20 rounded-xl text-center space-y-1.5 animate-fade-in">
+                  <p className="text-[11px] text-amber-400 font-semibold leading-relaxed">
+                    No active team members are registered in the roster yet.
+                  </p>
+                  <p className="text-[9px] text-muted-foreground">
+                    Please log in as the Team Leader (Admin) to configure your team roster.
+                  </p>
+                </div>
+              ) : (
+                <Button
+                  onClick={() => {
+                    if (!selectedMemberLogin) {
+                      setLoginError("Please choose a member account first.");
+                      return;
+                    }
+                    setCurrentRole(Number(selectedMemberLogin));
+                    setLoginError("");
+                  }}
+                  className="w-full bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs tracking-wider uppercase py-3.5 rounded-xl shadow-lg shadow-purple-600/15 hover:shadow-purple-600/20 active:scale-[0.99] transition-all flex items-center justify-center gap-2"
+                >
+                  Enter Portal <ArrowRight className="size-4" />
+                </Button>
+              )}
+            </div>
+          )}
+
+          {/* Tab Content: Team Leader (Admin) Portal */}
+          {selectedRoleType === "admin" && (
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider block">Admin Access Passcode</label>
+                <Input
+                  type="password"
+                  placeholder="••••••••"
+                  value={passcodeAttempt}
+                  onChange={(e) => {
+                    setPasscodeAttempt(e.target.value);
+                    setLoginError("");
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") handleAdminLogin();
+                  }}
+                  className="w-full bg-secondary/50 border border-border/30 rounded-xl px-4 py-3 text-sm text-foreground outline-none focus:border-purple-500/50 transition-colors"
+                />
+              </div>
+
+              <Button
+                onClick={handleAdminLogin}
+                className="w-full bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs tracking-wider uppercase py-3.5 rounded-xl shadow-lg shadow-purple-600/15 hover:shadow-purple-600/20 active:scale-[0.99] transition-all flex items-center justify-center gap-2"
+              >
+                Authenticate & Enter <ArrowRight className="size-4" />
+              </Button>
+            </div>
+          )}
+
+          {/* Error Message */}
+          {loginError && (
+            <div className="p-3 bg-rose-500/15 border border-rose-500/20 text-rose-400 text-xs rounded-xl font-medium text-center animate-shake">
+              {loginError}
+            </div>
+          )}
+
+          {/* Quick Helper Tip */}
+          <div className="pt-4 border-t border-border/10 text-center text-[10px] text-muted-foreground flex justify-between items-center px-1">
+            <span>Passcode: <code>admin123</code></span>
+            <button
+              onClick={() => setIsDarkMode(!isDarkMode)}
+              className="hover:text-foreground transition-colors flex items-center gap-1 font-semibold"
+            >
+              {isDarkMode ? <Sun className="size-3" /> : <Moon className="size-3" />}
+              {isDarkMode ? "Light Mode" : "Dark Mode"}
+            </button>
+          </div>
+
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-background text-foreground transition-colors duration-300 font-sans">
 
@@ -504,19 +674,30 @@ export default function TaskBoard() {
           </nav>
 
           <div className="flex items-center gap-3">
-            {/* Role Portal Selector */}
-            <div className="flex items-center gap-1.5 bg-secondary/80 px-2.5 py-1 rounded-xl border border-border/30">
-              <span className="text-[9px] font-bold text-muted-foreground uppercase tracking-wider">Portal:</span>
-              <select
-                value={currentRole}
-                onChange={e => setCurrentRole(e.target.value === "admin" ? "admin" : Number(e.target.value))}
-                className="bg-transparent text-xs text-foreground font-semibold outline-none cursor-pointer"
+            {/* Active User Badge & Lock Screen Trigger */}
+            <div className="flex items-center gap-3 bg-secondary/60 pl-3 pr-1.5 py-1 rounded-xl border border-border/20">
+              <div className="flex items-center gap-2">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-purple-500"></span>
+                </span>
+                <span className="text-[11px] font-bold text-foreground">
+                  {currentRole === "admin" ? (
+                    "Leader (Admin)"
+                  ) : (
+                    members.find(m => m.id == currentRole)?.name || "Team Member"
+                  )}
+                </span>
+              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setCurrentRole(null)}
+                className="h-7 px-2.5 rounded-lg text-[9px] font-bold uppercase tracking-wider bg-background hover:bg-secondary text-muted-foreground hover:text-foreground flex items-center gap-1 border border-border/10"
+                title="Lock Workspace / Switch Portal"
               >
-                <option value="admin">Team Leader (Admin)</option>
-                {members.map(m => (
-                  <option key={m.id} value={m.id}>{m.name} (Member)</option>
-                ))}
-              </select>
+                Switch Portal
+              </Button>
             </div>
 
             {/* Clear Board Button */}
