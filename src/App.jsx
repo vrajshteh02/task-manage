@@ -70,60 +70,60 @@ const getMonthGrid = (year, month) => {
 };
 
 // Initial gorgeous mock data to wow the user on first load
-const INITIAL_MEMBERS = [
-  { id: 101, name: "Sophia Martinez", role: "Product UI Designer", color: "from-pink-500 to-rose-600" },
-  { id: 102, name: "Liam Johnson", role: "Frontend Developer", color: "from-purple-500 to-indigo-600" },
-  { id: 103, name: "Marcus Vance", role: "Backend Architect", color: "from-blue-500 to-cyan-600" },
-  { id: 104, name: "Chloe Dubois", role: "Quality Assurance Lead", color: "from-emerald-500 to-teal-600" },
-];
+// const INITIAL_MEMBERS = [
+//   { id: 101, name: "Sophia Martinez", role: "Product UI Designer", color: "from-pink-500 to-rose-600" },
+//   { id: 102, name: "Liam Johnson", role: "Frontend Developer", color: "from-purple-500 to-indigo-600" },
+//   { id: 103, name: "Marcus Vance", role: "Backend Architect", color: "from-blue-500 to-cyan-600" },
+//   { id: 104, name: "Chloe Dubois", role: "Quality Assurance Lead", color: "from-emerald-500 to-teal-600" },
+// ];
 
-const INITIAL_TASKS = [
-  {
-    id: 1,
-    title: "Design Landing Page Hero Section",
-    detail: "Create beautiful glassmorphic visual designs with vivid gradients and rich animations in Figma.",
-    assignedTo: 101,
-    status: "Completed",
-    priority: "High",
-    deadline: formatDateLocal(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()),
-  },
-  {
-    id: 2,
-    title: "Integrate Stripe Payment Gateway",
-    detail: "Set up webhook handlers and checkout processes for user subscription purchases.",
-    assignedTo: 103,
-    status: "In Progress",
-    priority: "High",
-    deadline: formatDateLocal(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 3),
-  },
-  {
-    id: 3,
-    title: "Refactor Authentication Hooks",
-    detail: "Optimize context handlers and refresh token cycles to prevent excessive database hits.",
-    assignedTo: 102,
-    status: "In Review",
-    priority: "Medium",
-    deadline: formatDateLocal(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 1),
-  },
-  {
-    id: 4,
-    title: "Setup Docker Containers for Production",
-    detail: "Configure multi-stage build systems and leverage caching to speed up pipelines.",
-    assignedTo: null,
-    status: "Pending",
-    priority: "Low",
-    deadline: formatDateLocal(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 5),
-  },
-  {
-    id: 5,
-    title: "Write E2E Tests for Checkout Flow",
-    detail: "Utilize Playwright to test payment, dynamic pricing, and coupon discount validation codes.",
-    assignedTo: 104,
-    status: "Pending",
-    priority: "Medium",
-    deadline: formatDateLocal(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 6),
-  },
-];
+// const INITIAL_TASKS = [
+//   {
+//     id: 1,
+//     title: "Design Landing Page Hero Section",
+//     detail: "Create beautiful glassmorphic visual designs with vivid gradients and rich animations in Figma.",
+//     assignedTo: 101,
+//     status: "Completed",
+//     priority: "High",
+//     deadline: formatDateLocal(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()),
+//   },
+//   {
+//     id: 2,
+//     title: "Integrate Stripe Payment Gateway",
+//     detail: "Set up webhook handlers and checkout processes for user subscription purchases.",
+//     assignedTo: 103,
+//     status: "In Progress",
+//     priority: "High",
+//     deadline: formatDateLocal(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 3),
+//   },
+//   {
+//     id: 3,
+//     title: "Refactor Authentication Hooks",
+//     detail: "Optimize context handlers and refresh token cycles to prevent excessive database hits.",
+//     assignedTo: 102,
+//     status: "In Review",
+//     priority: "Medium",
+//     deadline: formatDateLocal(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 1),
+//   },
+//   {
+//     id: 4,
+//     title: "Setup Docker Containers for Production",
+//     detail: "Configure multi-stage build systems and leverage caching to speed up pipelines.",
+//     assignedTo: null,
+//     status: "Pending",
+//     priority: "Low",
+//     deadline: formatDateLocal(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 5),
+//   },
+//   {
+//     id: 5,
+//     title: "Write E2E Tests for Checkout Flow",
+//     detail: "Utilize Playwright to test payment, dynamic pricing, and coupon discount validation codes.",
+//     assignedTo: 104,
+//     status: "Pending",
+//     priority: "Medium",
+//     deadline: formatDateLocal(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 6),
+//   },
+// ];
 
 export default function TaskBoard() {
   const today = new Date();
@@ -568,8 +568,8 @@ export default function TaskBoard() {
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
                   className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${isActive
-                      ? "bg-primary text-primary-foreground shadow-lg shadow-purple-600/20"
-                      : "text-muted-foreground hover:text-foreground"
+                    ? "bg-primary text-primary-foreground shadow-lg shadow-purple-600/20"
+                    : "text-muted-foreground hover:text-foreground"
                     }`}
                 >
                   <Icon className="size-4" />
@@ -963,8 +963,8 @@ export default function TaskBoard() {
                     onDragLeave={() => setDragOverColumn(null)}
                     onDrop={e => handleDropToColumn(e, status)}
                     className={`flex flex-col rounded-2xl p-4 transition-all duration-200 min-h-[450px] ${isOver
-                        ? "bg-purple-900/10 border-2 border-dashed border-purple-500/50 scale-[1.01]"
-                        : "bg-secondary/40 border border-border/40"
+                      ? "bg-purple-900/10 border-2 border-dashed border-purple-500/50 scale-[1.01]"
+                      : "bg-secondary/40 border border-border/40"
                       }`}
                   >
 
@@ -972,8 +972,8 @@ export default function TaskBoard() {
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center gap-2">
                         <span className={`w-2.5 h-2.5 rounded-full ${status === "Pending" ? "bg-slate-400" :
-                            status === "In Progress" ? "bg-blue-500" :
-                              status === "In Review" ? "bg-amber-500" : "bg-emerald-500"
+                          status === "In Progress" ? "bg-blue-500" :
+                            status === "In Review" ? "bg-amber-500" : "bg-emerald-500"
                           }`} />
                         <h4 className="font-bold text-sm">{status}</h4>
                       </div>
@@ -1000,8 +1000,8 @@ export default function TaskBoard() {
                               onDragStart={e => handleDragStart(e, t.id)}
                               onDragEnd={handleDragEnd}
                               className={`p-4 rounded-xl glass hover:border-border/60 hover:shadow-lg transition-all duration-200 cursor-grab active:cursor-grabbing border border-border/30 relative flex flex-col justify-between gap-3 ${t.status === "Pending" ? "status-pending" :
-                                  t.status === "In Progress" ? "status-inprogress" :
-                                    t.status === "In Review" ? "status-underreview" : "status-completed"
+                                t.status === "In Progress" ? "status-inprogress" :
+                                  t.status === "In Review" ? "status-underreview" : "status-completed"
                                 } ${isBeingDragged ? "opacity-35 scale-95" : ""}`}
                             >
 
@@ -1080,8 +1080,8 @@ export default function TaskBoard() {
               onDragLeave={() => setDragOverMemberId(null)}
               onDrop={e => handleDropToMember(e, null)}
               className={`p-4 rounded-xl border border-dashed text-center text-xs transition-all ${dragOverMemberId === "unassigned"
-                  ? "bg-purple-900/10 border-purple-500/50 scale-[1.01]"
-                  : "bg-secondary/10 border-border/20 text-muted-foreground"
+                ? "bg-purple-900/10 border-purple-500/50 scale-[1.01]"
+                : "bg-secondary/10 border-border/20 text-muted-foreground"
                 }`}
             >
               <div className="flex items-center justify-center gap-2">
@@ -1179,8 +1179,8 @@ export default function TaskBoard() {
                           onDragLeave={() => setDragOverMemberId(null)}
                           onDrop={e => handleDropToMember(e, m.id)}
                           className={`p-4 rounded-xl border flex items-center justify-between transition-all duration-200 ${isOver
-                              ? "bg-purple-900/10 border-2 border-dashed border-purple-500/50 scale-[1.01]"
-                              : "bg-secondary/20 border border-border/30 hover:border-border/60"
+                            ? "bg-purple-900/10 border-2 border-dashed border-purple-500/50 scale-[1.01]"
+                            : "bg-secondary/20 border border-border/30 hover:border-border/60"
                             }`}
                         >
                           <div className="flex items-center gap-3">
@@ -1264,10 +1264,10 @@ export default function TaskBoard() {
                       key={idx}
                       onClick={() => dateStr && setSelectedDate(dateStr)}
                       className={`min-h-[110px] rounded-xl border p-2 flex flex-col justify-between transition-all duration-200 cursor-pointer ${!dateStr
-                          ? "bg-transparent border-transparent pointer-events-none opacity-20"
-                          : isToday
-                            ? "bg-purple-500/10 border-purple-500/50 shadow-md shadow-purple-500/5"
-                            : "bg-secondary/15 border-border/25 hover:border-border/70 hover:bg-secondary/35"
+                        ? "bg-transparent border-transparent pointer-events-none opacity-20"
+                        : isToday
+                          ? "bg-purple-500/10 border-purple-500/50 shadow-md shadow-purple-500/5"
+                          : "bg-secondary/15 border-border/25 hover:border-border/70 hover:bg-secondary/35"
                         }`}
                     >
                       <div className="flex justify-between items-start">
@@ -1288,8 +1288,8 @@ export default function TaskBoard() {
                           <div
                             key={t.id}
                             className={`text-[9px] px-1.5 py-0.5 rounded truncate font-medium ${t.status === "Completed" ? "bg-emerald-500/15 text-emerald-400" :
-                                t.status === "In Progress" ? "bg-blue-500/15 text-blue-400" :
-                                  "bg-slate-500/15 text-slate-300"
+                              t.status === "In Progress" ? "bg-blue-500/15 text-blue-400" :
+                                "bg-slate-500/15 text-slate-300"
                               }`}
                             title={t.title}
                           >
