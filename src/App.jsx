@@ -77,6 +77,7 @@ export default function TaskBoard() {
 
   // App Theme & Navigation State
   const [isDarkMode, setIsDarkMode] = useState(true);
+  const [activeTab, setActiveTab] = useState("board"); // board, team, calendar, analytics
   const [currentRole, setCurrentRole] = useState(null); // null, 'admin', or member ID (number)
 
   // Login Panel / Lock Screen Input States
