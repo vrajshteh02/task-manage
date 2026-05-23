@@ -69,61 +69,7 @@ const getMonthGrid = (year, month) => {
   return grid;
 };
 
-// Initial gorgeous mock data to wow the user on first load
-// const INITIAL_MEMBERS = [
-//   { id: 101, name: "Sophia Martinez", role: "Product UI Designer", color: "from-pink-500 to-rose-600" },
-//   { id: 102, name: "Liam Johnson", role: "Frontend Developer", color: "from-purple-500 to-indigo-600" },
-//   { id: 103, name: "Marcus Vance", role: "Backend Architect", color: "from-blue-500 to-cyan-600" },
-//   { id: 104, name: "Chloe Dubois", role: "Quality Assurance Lead", color: "from-emerald-500 to-teal-600" },
-// ];
 
-// const INITIAL_TASKS = [
-//   {
-//     id: 1,
-//     title: "Design Landing Page Hero Section",
-//     detail: "Create beautiful glassmorphic visual designs with vivid gradients and rich animations in Figma.",
-//     assignedTo: 101,
-//     status: "Completed",
-//     priority: "High",
-//     deadline: formatDateLocal(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()),
-//   },
-//   {
-//     id: 2,
-//     title: "Integrate Stripe Payment Gateway",
-//     detail: "Set up webhook handlers and checkout processes for user subscription purchases.",
-//     assignedTo: 103,
-//     status: "In Progress",
-//     priority: "High",
-//     deadline: formatDateLocal(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 3),
-//   },
-//   {
-//     id: 3,
-//     title: "Refactor Authentication Hooks",
-//     detail: "Optimize context handlers and refresh token cycles to prevent excessive database hits.",
-//     assignedTo: 102,
-//     status: "In Review",
-//     priority: "Medium",
-//     deadline: formatDateLocal(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 1),
-//   },
-//   {
-//     id: 4,
-//     title: "Setup Docker Containers for Production",
-//     detail: "Configure multi-stage build systems and leverage caching to speed up pipelines.",
-//     assignedTo: null,
-//     status: "Pending",
-//     priority: "Low",
-//     deadline: formatDateLocal(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 5),
-//   },
-//   {
-//     id: 5,
-//     title: "Write E2E Tests for Checkout Flow",
-//     detail: "Utilize Playwright to test payment, dynamic pricing, and coupon discount validation codes.",
-//     assignedTo: 104,
-//     status: "Pending",
-//     priority: "Medium",
-//     deadline: formatDateLocal(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 6),
-//   },
-// ];
 
 export default function TaskBoard() {
   const today = new Date();
@@ -137,11 +83,11 @@ export default function TaskBoard() {
   // Core Data States
   const [tasks, setTasks] = useState(() => {
     const saved = localStorage.getItem("tasks");
-    return saved ? JSON.parse(saved) : INITIAL_TASKS;
+    return saved ? JSON.parse(saved) : [];
   });
   const [members, setMembers] = useState(() => {
     const saved = localStorage.getItem("members");
-    return saved ? JSON.parse(saved) : INITIAL_MEMBERS;
+    return saved ? JSON.parse(saved) : [];
   });
 
   // Input States for New Task Creation
@@ -196,15 +142,7 @@ export default function TaskBoard() {
       snapshot.forEach(doc => {
         list.push(doc.data());
       });
-
-      // If Firestore is empty (first run), pre-populate with INITIAL_TASKS!
-      if (list.length === 0 && tasks.length === INITIAL_TASKS.length) {
-        INITIAL_TASKS.forEach(async (t) => {
-          await setDoc(doc(db, "tasks", String(t.id)), t);
-        });
-      } else {
-        setTasks(list);
-      }
+      setTasks(list);
     });
 
     return () => unsubscribe();
@@ -223,15 +161,7 @@ export default function TaskBoard() {
       snapshot.forEach(doc => {
         list.push(doc.data());
       });
-
-      // If Firestore is empty, pre-populate with INITIAL_MEMBERS!
-      if (list.length === 0 && members.length === INITIAL_MEMBERS.length) {
-        INITIAL_MEMBERS.forEach(async (m) => {
-          await setDoc(doc(db, "members", String(m.id)), m);
-        });
-      } else {
-        setMembers(list);
-      }
+      setMembers(list);
     });
 
     return () => unsubscribe();
@@ -404,9 +334,9 @@ export default function TaskBoard() {
     }
   };
 
-  // Reset local storage back to Demo Mock Data
-  const handleResetDemoData = async () => {
-    if (confirm("This will reset all tasks and members to the default high-quality demo board. Continue?")) {
+  // Clear all tasks and members
+  const handleClearAllData = async () => {
+    if (confirm("This will permanently clear all tasks and members from the dashboard. Continue?")) {
       if (isFirebaseActive) {
         // Clean up current Firestore tasks
         tasks.forEach(async (t) => {
@@ -416,17 +346,11 @@ export default function TaskBoard() {
         members.forEach(async (m) => {
           await deleteDoc(doc(db, "members", String(m.id)));
         });
-
-        // Insert defaults
-        INITIAL_TASKS.forEach(async (t) => {
-          await setDoc(doc(db, "tasks", String(t.id)), t);
-        });
-        INITIAL_MEMBERS.forEach(async (m) => {
-          await setDoc(doc(db, "members", String(m.id)), m);
-        });
       } else {
-        setTasks(INITIAL_TASKS);
-        setMembers(INITIAL_MEMBERS);
+        setTasks([]);
+        setMembers([]);
+        localStorage.removeItem("tasks");
+        localStorage.removeItem("members");
       }
     }
   };
@@ -595,14 +519,14 @@ export default function TaskBoard() {
               </select>
             </div>
 
-            {/* Demo Reset Button */}
+            {/* Clear Board Button */}
             {/* <Button
               variant="outline"
               size="sm"
-              onClick={handleResetDemoData}
+              onClick={handleClearAllData}
               className="text-xs border-dashed text-purple-400 border-purple-500/30 hover:bg-purple-500/10"
             >
-              Reset Demo Data
+              Clear Board Data
             </Button> */}
 
             {/* Dark Mode Toggle */}
